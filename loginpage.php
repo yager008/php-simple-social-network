@@ -163,16 +163,16 @@ if (isset($_POST['submitbutton'])) {
 
     <form method="post">
         <input type="text" name='username' placeholder="username" value=
-                                                                        <?php
-                                                                            if (!empty($UsernameBuffer))
-                                                                            {
-                                                                                echo $UsernameBuffer;
-                                                                            }
-                                                                            else 
-                                                                            {
-                                                                                echo '';
-                                                                            }
-                                                                        ?>>
+            <?php
+                if (!empty($UsernameBuffer))
+                {
+                    echo $UsernameBuffer;
+                }
+                else
+                {
+                    echo '';
+                }
+            ?>>
         <div>
             <!-- Usernameworning: -->
             <?php 
