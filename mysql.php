@@ -1,4 +1,5 @@
 <?php
+
 include_once("debug.php");
 $db_server = 'localhost';
 $db_user = 'root';

@@ -1,5 +1,5 @@
-
 <?php
+
 include("mysql.php");
 include_once "debug.php";
 
@@ -9,7 +9,7 @@ $_SESSION['bNewUserAlert'] = false;
 
 $sql = "SELECT * FROM `users`";
 
-$resalt = mysqli_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
 
 $UsernameError = '';
 $PasswordError= '';
@@ -23,58 +23,47 @@ $RealPassword= '';
 $LoginError='';
 
 
-if($_SERVER['REQUEST_METHOD'] = 'POST' && isset($_POST['aha']))
+if($_SERVER['REQUEST_METHOD'] = 'POST' && isset($_POST['button_name_aha']))
 {
     header('Location: loginpage.php');
 }
 
-if (isset($_POST['submitbutton'])) 
+if (isset($_POST['submitButton']))
 {
-    debug_to_console('submitbutton pressed');
-
     if(empty($_POST['username']) || empty($_POST['password']))
     {
-        debug_to_console('smt is wrong');
-
         if(empty($_POST['username']))
         {
             $UsernameError='no username entered';
-            debug_to_console('username is emptry');
-
+            debug_to_console('username is empty');
         }
         else
         {
             $UsernameBuffer=$_POST['username'];
             $UsernameError='';
-            debug_to_console('username is not empty');
-
         }
 
         if(empty($_POST['password']))
         {
             $PasswordError='no password entered';
             debug_to_console('password is empty');
-
         }
         else
         {
             $PasswordBuffer=$_POST['password'];
             $PasswordError='';
-            debug_to_console('password is not empty');
-
         }
     }
     else
-
     {
         $UsernameBuffer=$_POST['username'];
         $PasswordBuffer=$_POST['password'];
 
         $bFoundSuchUser = false;
 
-        if (mysqli_num_rows($resalt) > 0)
+        if (mysqli_num_rows($result) > 0)
         {
-            while ($row = mysqli_fetch_assoc($resalt))
+            while ($row = mysqli_fetch_assoc($result))
             {
                 if ($row['Name'] == $UsernameBuffer)
                 {
@@ -86,8 +75,13 @@ if (isset($_POST['submitbutton']))
 
         if(!$bFoundSuchUser)
         {
-            $sql = "INSERT INTO `users` (Name, Password, PhotoRef) VALUES ('$UsernameBuffer', '$PasswordBuffer', 'avatars/defaultavatar.jpg')";
-            mysqli_query($conn, $sql);
+            $sql = "INSERT INTO `users` (Name, Password, PhotoRef) VALUES (?, ?, ?)";
+            $stmt = mysqli_prepare($conn, $sql);
+            mysqli_stmt_bind_param($stmt, "sss", $UsernameBuffer, $PasswordBuffer, $photoRef);
+            $photoRef = 'avatars/defaultavatar.jpg'; // Assuming this is a default value
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_close($stmt);
+
             debug_to_console("new user created");
             $_SESSION['bNewUserAlert'] = true;
             header("Location: loginpage.php");
@@ -123,16 +117,16 @@ if (isset($_POST['submitbutton']))
 
     <form action='' method="post">
         <input type="text" name='username' placeholder="username" value=
-                                                                        <?php
-                                                                            if (!empty($UsernameBuffer))
-                                                                            {
-                                                                                echo $UsernameBuffer;
-                                                                            }
-                                                                            else 
-                                                                            {
-                                                                            echo '';
-                                                                            }
-                                                                        ?>>
+            <?php
+                if (!empty($UsernameBuffer))
+                {
+                    echo $UsernameBuffer;
+                }
+                else
+                {
+                echo '';
+                }
+            ?>>
         <div>
             <!-- Usernameworning: -->
             <?php 
@@ -151,16 +145,16 @@ if (isset($_POST['submitbutton']))
             Password:<br>
         </div>
             <input type="password" name='password' placeholder="password" value=
-                                                                            <?php 
-                                                                                if(!empty($PasswordBuffer))
-                                                                                {
-                                                                                    echo $PasswordBuffer; 
-                                                                                }
-                                                                                else 
-                                                                                {
-                                                                                    echo '';
-                                                                                }
-                                                                            ?>>
+                <?php
+                    if(!empty($PasswordBuffer))
+                    {
+                        echo $PasswordBuffer;
+                    }
+                    else
+                    {
+                        echo '';
+                    }
+                ?>>
         <div>
             <!-- PasswordWarning: --> 
             <?php 
@@ -172,17 +166,17 @@ if (isset($_POST['submitbutton']))
                 {
                     echo '<br>';
                 }
-            ?> <br>
+            ?>
+            <br>
         </div>
 
-        <button name='submitbutton'>submit</button>
+        <button name='submitButton'>submit</button>
 
-        <button name='aha' >already have account</button>
+        <button name='button_name_aha' >already have account</button>
         <input type='reset'>
 
         <?php 
-            if (!empty($LoginError))
-            {
+            if (!empty($LoginError)) {
                 echo "<br><br>{$LoginError}";
             }
         ?>
