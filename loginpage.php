@@ -6,12 +6,8 @@ include_once("debug.php");
 session_abort();
 session_start();
 
-//require_once('Router.php');
-//Router::handle("GET", "/table", "mysqltable.php");
-
 $_SESSION['bEditProfile'] = false;
 $_SESSION['bShowTable'] = true;
-//$_SESSION['rowRef'];
 
 if (!isset($_SESSION['bNewUserAlert']))
 {
@@ -48,9 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ca'])) {
     header('Location: createacc.php');
 }
 
-if (isset($_POST['submitbutton'])) {
-    debug_to_console('submitbutton pressed');
-
+if (isset($_POST['submitButton'])) {
+    debug_to_console('submitButton pressed');
 
     if(empty($_POST['username']) || empty($_POST['password']))
     {
@@ -110,7 +105,6 @@ if (isset($_POST['submitbutton'])) {
         if($bFoundSuchUser)
         {
             debug_to_console("there is such user");
-
             if($PasswordBuffer == $RealPassword)
             {
                 debug_to_console("welcome");
@@ -118,24 +112,21 @@ if (isset($_POST['submitbutton'])) {
                 $_SESSION['rowRef'] = $rowRef;
                 header("Location: userpage");
             }
-            else {
+            else
+            {
                 debug_to_console("password is wrong");
                 $LoginError = 'password is wrong';
             }
         }
-
-        else {
-
+        else
+        {
             debug_to_console("there is no such user");
             $LoginError = 'there is no such user';
         }
-
-
         $PasswordError='';
         $UsernameError='';
         //header('Location: userpage.php');
     }
-
 }
 ?>
 
@@ -192,16 +183,16 @@ if (isset($_POST['submitbutton'])) {
         </div>
 
         <input type="password" name='password' placeholder="password" value=
-                                                                            <?php 
-                                                                                if(!empty($PasswordBuffer))
-                                                                                {
-                                                                                    echo $PasswordBuffer; 
-                                                                                }
-                                                                                else 
-                                                                                {
-                                                                                    echo '';
-                                                                                }
-                                                                            ?>>
+            <?php
+                if(!empty($PasswordBuffer))
+                {
+                    echo $PasswordBuffer;
+                }
+                else
+                {
+                    echo '';
+                }
+            ?>>
         <div>
             <!-- PasswordWarning: --> 
             <?php 
@@ -216,24 +207,19 @@ if (isset($_POST['submitbutton'])) {
             ?> <br>
         </div>
 
-        <button name='submitbutton'>submit</button>
+        <button name='submitButton'>submit</button>
 
         <button name='ca' >create account</button>
 
         <input type='reset'>
-
-        <?php 
+        <?php
         if (!empty($LoginError))
         {
             echo "<br><br>{$LoginError}";
         }
         ?>
-
         <br><br>
-
         <button name="tableButton">listOfUsers</button>
-
     </form>
-    
 </body>
 </html>

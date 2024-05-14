@@ -1,5 +1,5 @@
-
 <?php
+
 include("mysql.php");
 
 ob_start();

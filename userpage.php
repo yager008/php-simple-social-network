@@ -1,82 +1,11 @@
 <?php
 include "mysql.php";
+include_once "UpdateRowRefFunc.php";
+include_once "GetRowFromIDFunc.php";
+
 session_start();
 
-
-//echo '<pre>';
-//var_dump($_SESSION);
-//echo '</pre>';
-//сессии нуждны чтобы перменная не инициировалась каждый раз когда мы обновляем страничку
-
-function UpdateRowRef($conn): void
-{
-    // Update rowRef Session variable with new info
-    $sql = "SELECT * FROM `users` WHERE ID=?";
-
-    // Prepare the statement
-    $stmt = mysqli_prepare($conn, $sql);
-
-    // Check if $_SESSION['rowRef'] is set and is an array
-    if (isset($_SESSION['rowRef']) && is_array($_SESSION['rowRef'])) {
-        // Bind the parameter
-        mysqli_stmt_bind_param($stmt, "i", $_SESSION['rowRef']['ID']);
-
-        // Execute the statement
-        mysqli_stmt_execute($stmt);
-
-        // Get the result
-        $result = mysqli_stmt_get_result($stmt);
-
-        // Fetch the row as an associative array
-        if ($row = mysqli_fetch_assoc($result)) {
-            $_SESSION["rowRef"] = $row;
-        } else {
-            // Handle error if no row found
-            $_SESSION["rowRef"] = [];
-        }
-    } else {
-        // Handle error if $_SESSION['rowRef'] is not set or not an array
-        $_SESSION["rowRef"] = [];
-    }
-
-    // Close the statement
-    mysqli_stmt_close($stmt);
-}
-
-
-
-function GetRowFromID ($conn , $rowID) : array | null
-{
-    // Prepare the SQL statement
-    $sql = "SELECT * FROM `users` WHERE ID= ? ";
-
-    // Prepare the statement
-    $stmt = mysqli_prepare($conn, $sql);
-
-    // Bind the parameters
-    mysqli_stmt_bind_param($stmt, "i", $rowID);
-
-    // Execute the statement
-    mysqli_stmt_execute($stmt);
-
-    // Get the result
-    $result = mysqli_stmt_get_result($stmt);
-
-    // Fetch the row as an associative array
-    $row = mysqli_fetch_assoc($result);
-    if ($row !== false) {
-        $_SESSION["rowRef"] = $row;
-    } else {
-        // Handle error if no row found
-        $_SESSION["rowRef"] = [];
-    }
-
-    // Close the statement
-    mysqli_stmt_close($stmt);
-
-    // Return the row
-    return $row;
-}
+UpdateRowRef($conn);
 
 $_SESSION['nameBuffer'] = $_SESSION['rowRef']['Name'];
 $_SESSION['surnameBuffer'] = $_SESSION['rowRef']['Surname'];
@@ -249,9 +178,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['surnameText'])) {
     mysqli_stmt_execute($stmt);
 
     // Check if the update was successful
-    if (mysqli_stmt_affected_rows($stmt) > 0) {
+    if (mysqli_stmt_affected_rows($stmt) > 0)
+    {
         $_SESSION['surnameBuffer'] = $_POST['surnameText'];
-    } else {
+    }
+    else
+    {
         // Handle error if the update failed
         echo "surname update failed";
     }
@@ -311,7 +243,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['aboutMeText'])) {
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileInput']) && $_FILES['fileInput']['size'] > 0) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileInput']) && $_FILES['fileInput']['size'] > 0)
+{
     // Prepare the SQL statement
     $sql = "UPDATE `users` SET PhotoRef=? WHERE ID=?";
 
@@ -325,7 +258,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileInput']) && $_FIL
     echo "new file location: " . $folder . "<br>";
 
     if(!move_uploaded_file($fileTmpName, $folder))
-    { echo "file upload error";
+    {
+        echo "file upload error";
     }
     else {
         // Bind the parameters
@@ -335,14 +269,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['fileInput']) && $_FIL
         mysqli_stmt_execute($stmt);
 
         // Check if the update was successful
-        if (mysqli_stmt_affected_rows($stmt) > 0) {
+        if (mysqli_stmt_affected_rows($stmt) > 0)
+        {
             $_SESSION['aboutMeBuffer'] = $_POST['aboutMeText'];
-        } else {
+        }
+        else
+        {
             // Handle error if the update failed
             echo "file update failed.";
         }
     }
-
     mysqli_stmt_close($stmt);
 }
 
@@ -447,10 +383,9 @@ if($_SESSION['bShowTable']) {
                 echo "<p>ID: {$row['ID']}</p>";
                 echo
                 "
-            <button name='buttonID' value='{$row['ID']}'> press me </button>
+                <button name='buttonID' value='{$row['ID']}'> press me </button>
                 ";
                 echo "<br>";
-
                 echo "</div>";
                 echo "</div>";
             }
@@ -472,7 +407,6 @@ if ($_SESSION['bShowChat'])
     <img src=<?php echo $_SESSION['chatterRowRef']['PhotoRef'] ?> style="width: 100px">
     <br><br>
     <?php
-    //amogus
 
     try
     {
@@ -541,36 +475,19 @@ if ($_SESSION['bShowChat'])
             ?>
             </table>
                 <?php
-        }
-    }
-    catch(mysqli_sql_exception)
-    {
-        echo "table does not exist yet";
-
-    }
-
-
-        ?>
-
+                    }
+                }
+                catch(mysqli_sql_exception)
+                {
+                    echo "table does not exist yet";
+                }
+                ?>
     <br>
     <textarea name="chatTextArea" style="resize: none" ></textarea><br><br>
     <input type="submit">
-
     <?php
-
-//    echo "current username: {$_SESSION['rowRef']['Name']}";
-
     echo "</form>";
-} //bShotTable = false end
-
-//echo "<br> <br> <br>";
-//date_default_timezone_set('UTC');
-//// now
-//    echo date('Y-m-d H:i:s', time() + 60 *60 );
-
-?>
-
+    }
+    ?>
 </body>
 </html>
-
-

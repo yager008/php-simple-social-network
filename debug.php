@@ -1,4 +1,5 @@
 <?php
+
 function debug_to_console($data) {
     $output = $data;
     if (is_array($output))
@@ -6,4 +7,3 @@ function debug_to_console($data) {
 
     echo "<script>console.log('php debug_to_console: " . $output . "' );</script>";
 }
-?>
