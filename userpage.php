@@ -12,35 +12,7 @@ $_SESSION['nameBuffer'] = $_SESSION['rowRef']['Name'];
 $_SESSION['surnameBuffer'] = $_SESSION['rowRef']['Surname'];
 $_SESSION['aboutMeBuffer'] = $_SESSION['rowRef']['AboutMe'];
 
-if (!isset($_SESSION['bShowChat']))
-{
-    $_SESSION['bShowChat'] = false;
-}
-
-if (!isset($_SESSION['IDofChatter']))
-{
-    $_SESSION['IDofChatter'] = 0;
-}
-
-if (!isset($_SESSION['tableName']))
-{
-    $_SESSION['tableName'] = null;
-}
-
-if (!isset($_SESSION['chatterRowRef']))
-{
-    $_SESSION['chatterRowRef'] = null;
-}
-
-if (!isset($_SESSION['bShowTable']))
-{
-    $_SESSION['bShowTable'] = true;
-}
-
-if (!isset($_SESSION['bEditProfile']))
-{
-    $_SESSION['bEditProfile'] = false;
-}
+include "userPageParts/SessionVarsSetup.php";
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfileButton']))
 {
@@ -56,19 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitEditProfileButto
 
 echo "current id: {$_SESSION['rowRef']['ID']} <br>";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['switchButton']))
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['showTableButton']))
 {
     $_SESSION['bShowTable'] = true;
     $_SESSION['bShowChat'] = false;
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buttonID']))
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['chatWithUserButton']))
 {
     $_SESSION['bEditProfile'] = false;
     $_SESSION['bShowTable'] = false;
     $_SESSION['bShowChat'] = true;
-    $_SESSION['IDofChatter'] = $_POST['buttonID'];
-    $_SESSION['chatterRowRef'] = GetRowFromID($conn, $_POST['buttonID']);
+    $_SESSION['IDofChatter'] = $_POST['chatWithUserButton'];
+    $_SESSION['chatterRowRef'] = GetRowFromID($conn, $_POST['chatWithUserButton']);
 
     $id1 = $_SESSION['chatterRowRef']['ID'];
     $id2 = $_SESSION['rowRef']['ID'];
@@ -102,14 +74,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buttonID']))
 //отпраляем инфу по чату
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['chatTextArea']))
 {
-
     echo "<br> text from chatTextArea: {$_POST['chatTextArea']} <br><br>";
 
     try
     {
         $currentDate = date('Y-m-d H:i:s', time() + 60 *60 *2 );
 
-        $sql = "INSERT INTO `" . "{$_SESSION['tableName']}" . "` (`ID`, `Name`, `Text`, `Date`) VALUES (NULL, ?, ?, ?)";
+        $sql = "INSERT INTO `" . "{$_SESSION['tableName']}" . "` (`Name`, `Text`, `Date`) VALUES (?, ?, ?)";
 
         $stmt = mysqli_prepare($conn, $sql);
 
@@ -130,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['chatTextArea']))
 
         $currentDate = date('Y-m-d H:i:s', time() + 60 *60 *2 );
 
-        $sql = "INSERT INTO `" . "{$_SESSION['tableName']}" . "` (`ID`, `Name`, `Text`, `Date`) VALUES (NULL, ?, ?, ?)";
+        $sql = "INSERT INTO `" . "{$_SESSION['tableName']}" . "` (`Name`, `Text`, `Date`) VALUES (?, ?, ?)";
 
         $stmt = mysqli_prepare($conn, $sql);
 
@@ -174,7 +145,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logoutbutton']))
     <img src="<?php echo $_SESSION['rowRef']['PhotoRef']; ?>" style="width: 100px; height: 100px;">
 
     <?php
-
     if($_SESSION['bEditProfile'])
     {
         include "userPageParts/EditProfile.php";

@@ -1,5 +1,5 @@
 <form method="POST">
-    <button name="switchButton">show table of users</button>
+    <button name="showTableButton">show table of users</button>
 </form>
 
 <p>ID of chatter: <?php echo $_SESSION['chatterRowRef']['ID']?></p>

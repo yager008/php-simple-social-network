@@ -16,12 +16,12 @@ function GetRowFromID ($conn , $rowID) : array | null
 
     // Fetch the row as an associative array
     $row = mysqli_fetch_assoc($result);
-    if ($row !== false) {
-        $_SESSION["rowRef"] = $row;
-    } else {
-        // Handle error if no row found
-        $_SESSION["rowRef"] = [];
-    }
+//    if ($row !== false) {
+//        $_SESSION["rowRef"] = $row;
+//    } else {
+//        // Handle error if no row found
+//        $_SESSION["rowRef"] = [];
+//    }
 
     // Close the statement
     mysqli_stmt_close($stmt);

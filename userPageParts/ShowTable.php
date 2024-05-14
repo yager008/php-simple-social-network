@@ -21,15 +21,16 @@ if (mysqli_num_rows($result) > 0)
         <div style='display: flex; flex-direction: row; width: 125px; align-items: center; border: 2px solid #8880ff; padding: 10px; margin-bottom: 30px; margin-left: 10px; background-color: #f0f0f0;'>
             <div style='padding-right: 10px; padding-left: 1px;'>
         <?php
-        echo "<img src='" . $row['PhotoRef'] . "' style='width: 50px; height: 50px;'>";
         echo "</div>";
         echo "<div style='margin-top: 10px;'>"; // Adjust margin as needed
+
+        echo "<img src='{$row['PhotoRef']}' style='width: 100px'>";
         echo "<p>{$row['Name']}</p>";
         echo "<p>{$row['AboutMe']}</p>";
         echo "<p>ID: {$row['ID']}</p>";
         echo
         "
-        <button name='buttonID' value='{$row['ID']}'> chat </button>
+        <button name='chatWithUserButton' value='{$row['ID']}'> chat </button>
         ";
         echo "<br>";
         echo "</div>";
