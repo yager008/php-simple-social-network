@@ -7,6 +7,10 @@
 <?php
 time();
 echo "<form method ='POST'>";
+
+$sql = "SELECT * FROM `users`";
+$result = mysqli_query($conn, $sql);
+
 if (mysqli_num_rows($result) > 0)
 {
     echo "<br><br>";
@@ -25,8 +29,8 @@ if (mysqli_num_rows($result) > 0)
         echo "<p>ID: {$row['ID']}</p>";
         echo
         "
-            <button name='buttonID' value='{$row['ID']}'> press me </button>
-            ";
+        <button name='buttonID' value='{$row['ID']}'> chat </button>
+        ";
         echo "<br>";
         echo "</div>";
         echo "</div>";

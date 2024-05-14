@@ -169,20 +169,14 @@ if (isset($_POST['submitButton']))
             ?>
             <br>
         </div>
-
         <button name='submitButton'>submit</button>
-
         <button name='button_name_aha' >already have account</button>
         <input type='reset'>
-
-        <?php 
+        <?php
             if (!empty($LoginError)) {
                 echo "<br><br>{$LoginError}";
             }
         ?>
-
-
-
     </form>
     
 </body>

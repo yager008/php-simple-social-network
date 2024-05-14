@@ -10,6 +10,7 @@
 <?php
     try
     {
+
         echo "<br><br> tableName: {$_SESSION['tableName']}<br><br>";
         $sql = "SELECT * FROM `{$_SESSION['tableName']}`";
 
