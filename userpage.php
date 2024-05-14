@@ -11,19 +11,23 @@ $_SESSION['nameBuffer'] = $_SESSION['rowRef']['Name'];
 $_SESSION['surnameBuffer'] = $_SESSION['rowRef']['Surname'];
 $_SESSION['aboutMeBuffer'] = $_SESSION['rowRef']['AboutMe'];
 
-if (!isset($_SESSION['bShowChat'])) {
+if (!isset($_SESSION['bShowChat']))
+{
     $_SESSION['bShowChat'] = false;
 }
 
-if (!isset($_SESSION['IDofChatter'])) {
+if (!isset($_SESSION['IDofChatter']))
+{
     $_SESSION['IDofChatter'] = 0;
 }
 
-if (!isset($_SESSION['tableName'])) {
+if (!isset($_SESSION['tableName']))
+{
     $_SESSION['tableName'] = null;
 }
 
-if (!isset($_SESSION['chatterRowRef'])) {
+if (!isset($_SESSION['chatterRowRef']))
+{
     $_SESSION['chatterRowRef'] = null;
 }
 
@@ -48,17 +52,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitButton']))
     $_SESSION['bEditProfile'] = !$_SESSION['bEditProfile'];
     $_SESSION['bShowTable'] = true;
 }
+
 echo "current id: {$_SESSION['rowRef']['ID']} <br>";
 
-//если нажимаем на switchButton то bShowTable = true
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['switchButton'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['switchButton']))
+{
     $_SESSION['bShowTable'] = true;
     $_SESSION['bShowChat'] = false;
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buttonID'])) {
-//    echo "<script>window.alert('" . $_POST['buttonID'] . "');</script>";
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buttonID']))
+{
     $_SESSION['bEditProfile'] = false;
     $_SESSION['bShowTable'] = false;
     $_SESSION['bShowChat'] = true;
@@ -87,13 +92,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['buttonID'])) {
 
     $stmt = mysqli_prepare($conn, $sql);
 
-    // Execute the statement
     mysqli_stmt_execute($stmt);
 
     mysqli_stmt_close($stmt);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['chatTextArea'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['chatTextArea']))
+{
 
     echo "<br> text from chatTextArea: {$_POST['chatTextArea']} <br><br>";
 
@@ -139,40 +144,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['chatTextArea'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['nameText'])) {
-    // Prepare the SQL statement
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['nameText']))
+{
     $sql = "UPDATE `users` SET Name=? WHERE ID=?";
 
-    // Prepare the statement
     $stmt = mysqli_prepare($conn, $sql);
 
-    // Bind the parameters
     mysqli_stmt_bind_param($stmt, "si", $_POST['nameText'], $_SESSION['rowRef']['ID']);
 
-    // Execute the statement
     mysqli_stmt_execute($stmt);
 
-    // Check if the update was successful
-    if (mysqli_stmt_affected_rows($stmt) > 0) {
+    if (mysqli_stmt_affected_rows($stmt) > 0)
+    {
         $_SESSION['nameBuffer'] = $_POST['nameText'];
-    } else {
-        // Handle error if the update failed
+    }
+    else
+    {
         echo "name update failed.";
     }
-
-    // Close the statement
     mysqli_stmt_close($stmt);
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['surnameText'])) {
-    // Prepare the SQL statement
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['surnameText']))
+{
     $sql = "UPDATE `users` SET Surname=? WHERE ID=?";
 
-    // Prepare the statement
     $stmt = mysqli_prepare($conn, $sql);
 
-    // Bind the parameters
     mysqli_stmt_bind_param($stmt, "si", $_POST['surnameText'], $_SESSION['rowRef']['ID']);
+
+    mysqli_stmt_execute($stmt);
+
+    if (mysqli_stmt_affected_rows($stmt) > 0)
+    {
+        $_SESSION['surnameBuffer'] = $_POST['surnameText'];
+    }
+    else
+    {
+        echo "surname update failed";
+    }
+    mysqli_stmt_close($stmt);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['aboutMeText']))
+{
+    $sql = "UPDATE `users` SET AboutMe=? WHERE ID=?";
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    mysqli_stmt_bind_param($stmt, "si", $_POST['aboutMeText'], $_SESSION['rowRef']['ID']);
 
     // Execute the statement
     mysqli_stmt_execute($stmt);
@@ -180,35 +200,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['surnameText'])) {
     // Check if the update was successful
     if (mysqli_stmt_affected_rows($stmt) > 0)
     {
-        $_SESSION['surnameBuffer'] = $_POST['surnameText'];
+        $_SESSION['aboutMeBuffer'] = $_POST['aboutMeText'];
     }
     else
     {
-        // Handle error if the update failed
-        echo "surname update failed";
-    }
-
-    // Close the statement
-    mysqli_stmt_close($stmt);
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['aboutMeText'])) {
-    // Prepare the SQL statement
-    $sql = "UPDATE `users` SET AboutMe=? WHERE ID=?";
-
-    // Prepare the statement
-    $stmt = mysqli_prepare($conn, $sql);
-
-    // Bind the parameters
-    mysqli_stmt_bind_param($stmt, "si", $_POST['aboutMeText'], $_SESSION['rowRef']['ID']);
-
-    // Execute the statement
-    mysqli_stmt_execute($stmt);
-
-    // Check if the update was successful
-    if (mysqli_stmt_affected_rows($stmt) > 0) {
-        $_SESSION['aboutMeBuffer'] = $_POST['aboutMeText'];
-    } else {
         // Handle error if the update failed
         echo "Update failed.";
     }
