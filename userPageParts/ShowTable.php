@@ -14,7 +14,7 @@ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0)
 {
     echo "<br><br>";
-    echo "<div style='display: flex; flex-direction: row; justify-items: center; flex-wrap: wrap; max-width: 600px'>"; // Opening the container div here
+    echo "<div style='display: flex; flex-direction: row; justify-items: center; flex-wrap: wrap; max-width: 600px'>";
     while ($row = mysqli_fetch_assoc($result))
     {
         ?>
@@ -22,7 +22,7 @@ if (mysqli_num_rows($result) > 0)
             <div style='padding-right: 10px; padding-left: 1px;'>
         <?php
         echo "</div>";
-        echo "<div style='margin-top: 10px;'>"; // Adjust margin as needed
+        echo "<div style='margin-top: 10px;'>";
 
         echo "<img src='{$row['PhotoRef']}' style='width: 100px; height: auto; aspect-ratio: 1/1;'>";
 

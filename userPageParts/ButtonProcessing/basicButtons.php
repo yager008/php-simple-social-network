@@ -1,10 +1,15 @@
 <?php
 
-
 //editProfileButton
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfileButton']))
 {
-    $_SESSION['bEditProfile'] = !$_SESSION['bEditProfile'];
+    if ($_SESSION['bShowTable'] === false)
+    {
+        $_SESSION['bEditProfile'] = true;
+    }
+
+    $_SESSION['bEditProfile'] = true;
+
     $_SESSION['bShowTable'] = false;
 }
 

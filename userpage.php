@@ -14,7 +14,7 @@ $_SESSION['aboutMeBuffer'] = $_SESSION['rowRef']['AboutMe'];
 
 include "userPageParts/SessionVarsSetup.php";
 
-//DEBUG rowRef ID
+//DEBUG
 //echo "current id: {$_SESSION['rowRef']['ID']} <br>";
 
 include "userpageParts/ButtonProcessing/chatWithUserButton.php";
@@ -30,13 +30,13 @@ include "userPageParts/ChatMessageProcessing.php";
 include "userPageParts/EditProfileInputFieldsProcessing.php";
 
 //DEBUG
-//echo "bEditProfile:";
-//echo ($_SESSION['bEditProfile']) ? 'true' : 'false';
-//echo "<br> bShowTable:";
-//echo ($_SESSION['bShowTable']) ? 'true' : 'false';
-//echo "<br> bShowChat:";
-//echo ($_SESSION['bShowChat']) ? 'true' : 'false';
-//echo "<br><br><br>";
+echo "bEditProfile:";
+echo ($_SESSION['bEditProfile']) ? 'true' : 'false';
+echo "<br> bShowTable:";
+echo ($_SESSION['bShowTable']) ? 'true' : 'false';
+echo "<br> bShowChat:";
+echo ($_SESSION['bShowChat']) ? 'true' : 'false';
+echo "<br><br><br>";
 
 ?>
 
@@ -50,6 +50,7 @@ include "userPageParts/EditProfileInputFieldsProcessing.php";
 </head>
 <body>
 <div class="my div" style='margin-left: +15%;'>
+    <br>
     <img src="<?php echo $_SESSION['rowRef']['PhotoRef']; ?>" style="width: 100px; height: 100px;">
     <br>
     <br>
