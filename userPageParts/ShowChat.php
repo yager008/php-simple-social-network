@@ -1,8 +1,10 @@
+<br> <br>
 <form method="POST">
     <button name="showTableButton">show table of users</button>
 </form>
 
-<p>ID of chatter: <?php echo $_SESSION['chatterRowRef']['ID']?></p>
+<!--<p>ID of chatter: --><?php //echo $_SESSION['chatterRowRef']['ID']?><!--</p>-->
+
 <p>Name of chatter: <?php echo $_SESSION['chatterRowRef']['Name']?></p>
 <img src=<?php echo $_SESSION['chatterRowRef']['PhotoRef'] ?> style="width: 100px">
 <br><br>
@@ -11,11 +13,11 @@
     try
     {
 
-        echo "<br><br> tableName: {$_SESSION['tableName']}<br><br>";
-        $sql = "SELECT * FROM `{$_SESSION['tableName']}`";
+        // echo "<br><br> tableName: {$_SESSION['tableName']}<br><br>";
 
+        $sql = "SELECT * FROM `{$_SESSION['tableName']}`";
         $result = mysqli_query($conn, $sql);
-    ?>
+?>
 
 <form method ='POST'>
     <?php

@@ -7,3 +7,4 @@
 <div>
     about me: <?php echo $_SESSION['aboutMeBuffer']; ?>
 </div>
+<br>

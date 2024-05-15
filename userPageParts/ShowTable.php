@@ -24,9 +24,10 @@ if (mysqli_num_rows($result) > 0)
         echo "</div>";
         echo "<div style='margin-top: 10px;'>"; // Adjust margin as needed
 
-        echo "<img src='{$row['PhotoRef']}' style='width: 100px'>";
+        echo "<img src='{$row['PhotoRef']}' style='width: 100px; height: auto; aspect-ratio: 1/1;'>";
+
         echo "<p>{$row['Name']}</p>";
-        echo "<p>{$row['AboutMe']}</p>";
+//        echo "<p>{$row['AboutMe']}</p>";
         echo "<p>ID: {$row['ID']}</p>";
         echo
         "

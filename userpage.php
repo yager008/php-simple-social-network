@@ -14,122 +14,30 @@ $_SESSION['aboutMeBuffer'] = $_SESSION['rowRef']['AboutMe'];
 
 include "userPageParts/SessionVarsSetup.php";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['editProfileButton']))
-{
-    $_SESSION['bEditProfile'] = !$_SESSION['bEditProfile'];
-    $_SESSION['bShowTable'] = false;
-}
+//DEBUG rowRef ID
+//echo "current id: {$_SESSION['rowRef']['ID']} <br>";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submitEditProfileButton']))
-{
-    $_SESSION['bEditProfile'] = !$_SESSION['bEditProfile'];
-    $_SESSION['bShowTable'] = true;
-}
+include "userpageParts/ButtonProcessing/chatWithUserButton.php";
 
-echo "current id: {$_SESSION['rowRef']['ID']} <br>";
+//editProfileButton
+//submitEditProfileButton
+//showTableButton.php
+//logoutButton.php
+include "userpageParts/ButtonProcessing/basicButtons.php";
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['showTableButton']))
-{
-    $_SESSION['bShowTable'] = true;
-    $_SESSION['bShowChat'] = false;
-}
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['chatWithUserButton']))
-{
-    $_SESSION['bEditProfile'] = false;
-    $_SESSION['bShowTable'] = false;
-    $_SESSION['bShowChat'] = true;
-    $_SESSION['IDofChatter'] = $_POST['chatWithUserButton'];
-    $_SESSION['chatterRowRef'] = GetRowFromID($conn, $_POST['chatWithUserButton']);
-
-    $id1 = $_SESSION['chatterRowRef']['ID'];
-    $id2 = $_SESSION['rowRef']['ID'];
-
-    if ($id1 >= $id2)
-    {
-        $temp = $id1;
-        $id1 = $id2;
-        $id2 = $temp;
-    }
-
-    $_SESSION['tableName'] = 'id' . "{$id1}" . 'id' . "{$id2}";
-
-    $sql =
-        "
-        CREATE TABLE IF NOT EXISTS `{$_SESSION['tableName']}` (
-          `ID` int(255) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-          `Name` varchar(255) NOT NULL,
-          `Text` varchar(255) NOT NULL,
-          `Date` varchar(255) NOT NULL
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-        ";
-
-    $stmt = mysqli_prepare($conn, $sql);
-
-    mysqli_stmt_execute($stmt);
-
-    mysqli_stmt_close($stmt);
-}
-
-//отпраляем инфу по чату
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['chatTextArea']))
-{
-    echo "<br> text from chatTextArea: {$_POST['chatTextArea']} <br><br>";
-
-    try
-    {
-        $currentDate = date('Y-m-d H:i:s', time() + 60 *60 *2 );
-
-        $sql = "INSERT INTO `" . "{$_SESSION['tableName']}" . "` (`Name`, `Text`, `Date`) VALUES (?, ?, ?)";
-
-        $stmt = mysqli_prepare($conn, $sql);
-
-        mysqli_stmt_bind_param($stmt, "sss",$_SESSION['rowRef']['Name'], $_POST['chatTextArea'], $currentDate);
-
-        mysqli_stmt_execute($stmt);
-
-        mysqli_stmt_close($stmt);
-    }
-    catch (mysqli_sql_exception)
-    {
-        //add Date column to existing table
-
-        $sql = "ALTER TABLE `{$_SESSION['tableName']}` ADD `Date` VARCHAR(255) NOT NULL AFTER `Text`";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-
-        $currentDate = date('Y-m-d H:i:s', time() + 60 *60 *2 );
-
-        $sql = "INSERT INTO `" . "{$_SESSION['tableName']}" . "` (`Name`, `Text`, `Date`) VALUES (?, ?, ?)";
-
-        $stmt = mysqli_prepare($conn, $sql);
-
-        mysqli_stmt_bind_param($stmt, "sss",$_SESSION['rowRef']['Name'], $_POST['chatTextArea'], $currentDate);
-
-        mysqli_stmt_execute($stmt);
-
-        mysqli_stmt_close($stmt);
-
-    }
-}
+include "userPageParts/ChatMessageProcessing.php";
 
 include "userPageParts/EditProfileInputFieldsProcessing.php";
 
-//просто вывод инфы
-echo "bEditProfile:";
-echo ($_SESSION['bEditProfile']) ? 'true' : 'false';
-echo "<br> bShowTable:";
-echo ($_SESSION['bShowTable']) ? 'true' : 'false';
-echo "<br> bShowChat:";
-echo ($_SESSION['bShowChat']) ? 'true' : 'false';
-echo "<br><br><br>";
+//DEBUG
+//echo "bEditProfile:";
+//echo ($_SESSION['bEditProfile']) ? 'true' : 'false';
+//echo "<br> bShowTable:";
+//echo ($_SESSION['bShowTable']) ? 'true' : 'false';
+//echo "<br> bShowChat:";
+//echo ($_SESSION['bShowChat']) ? 'true' : 'false';
+//echo "<br><br><br>";
 
-//при нажатии на логаут меняем страничку
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logoutbutton']))
-{
-    header('Location: login');
-}
 ?>
 
 <!DOCTYPE html>
@@ -143,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['logoutbutton']))
 <body>
 <div class="my div" style='margin-left: +15%;'>
     <img src="<?php echo $_SESSION['rowRef']['PhotoRef']; ?>" style="width: 100px; height: 100px;">
+    <br>
+    <br>
 
     <?php
     if($_SESSION['bEditProfile'])
